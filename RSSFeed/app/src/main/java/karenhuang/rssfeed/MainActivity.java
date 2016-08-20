@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
@@ -23,8 +26,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String URL = "http://www.smh.com.au/rssheadlines/top.xml";
-
-
+    private RecyclerView recyclerView;
+    private ItemAdapter iAdapter;
+    //public static List<Item> itemList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +36,27 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        loadSmhFeed();
+
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        iAdapter = new ItemAdapter(SmhXmlParser.entries); //***********
+
+        RecyclerView.LayoutManager iLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(iLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(iAdapter);
+
+        iAdapter.notifyDataSetChanged();
+    }
+
+
         //WebView webview = new WebView(this);
 
         //setContentView(webView);
         //webView = (WebView) findViewById(R.id.webview);
-        loadSmhFeed();
 
-    }
+
+
 
 
 
@@ -67,19 +85,12 @@ public class MainActivity extends AppCompatActivity {
     public void loadSmhFeed(){
         //System.out.println("loadSMHFeed");
 
-        new DownloadFeed2().execute(URL);
+        new DownloadFeed().execute(URL);
         //System.out.println(URL);
     }
 
 
-
-
-
-
-
-
-
-    private class DownloadFeed2 extends AsyncTask<String, Void, String> {
+    private class DownloadFeed extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -95,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected void onPostExecute(String result) {
-                setContentView(R.layout.activity_main);
+               // setContentView(R.layout.activity_main);
                 //displays html string in UI via a WebView
             //TextView textView = (TextView) findViewById(R.id.textView);
            // textView.setText(result);
-                WebView webView = (WebView) findViewById(R.id.webView);
-                webView.loadData(result, "text/html", null);
+             //   WebView webView = (WebView) findViewById(R.id.webView);
+              //  webView.loadData(result, "text/html", null);
 
         }
 
@@ -130,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 displayString.append("'>" + item.title + "</a></p>");
                 displayString.append("<p>" + item.description + "</p>");
                 displayString.append("<p>" + item.creator+ "</p>");
-                displayString.append("<p>" + item.date + "</p>");
+                displayString.append("<p>" + item.pubDate + "</p>");
                 //displayString.append(item.title);
             }
            // System.out.println(displayString.toString());
@@ -154,4 +165,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+
+
 }

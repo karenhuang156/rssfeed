@@ -13,17 +13,17 @@ public class Item {
     public final String link;
     public final String description;
     public final String creator;
-    public final String date;
+    public final String pubDate;
     private static final String ns = null;
 
 
 
-    public Item (String title, String link, String description, String creator, String date){
+    public Item (String title, String link, String description, String creator, String pubDate){
         this.title = title;
         this.link = link;
         this.description = description;
         this.creator = creator;
-        this.date = date;
+        this.pubDate = pubDate;
     }
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
@@ -34,7 +34,7 @@ public class Item {
         String link = null;
         String description = null;
         String creator = null;
-        String date = null;
+        String pubDate = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             System.out.println("is not end tag");
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -56,14 +56,14 @@ public class Item {
                 creator = readCreator(parser);
                 System.out.println(creator);
             } else if (name.equals("pubDate")) {
-                date = readDate(parser);
-                System.out.println(date);
+                pubDate = readDate(parser);
+
             } else {
                 skip(parser);
             }
 
         }
-        return new Item(title,link, description, creator, date);
+        return new Item(title,link, description, creator, pubDate);
     }
 
     // Processes title tags in the feed.

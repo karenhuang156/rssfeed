@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class SmhXmlParser {
     private static final String ns = null;
+    public static List<Item> entries = new ArrayList();
 
 //Instantiate parser. In this case, the parser does nto take namespaces and uses the InputStream as unput.
 // It begins the parsing process by calling nextTag() and invokes readFeed()
@@ -30,7 +31,7 @@ public class SmhXmlParser {
     //This method processes the feed. It looks for elements tagged <entry> for recursively processing the feed.
     //If tag does not have entry tag, it skips it. readFeed()returns a List of the entires (containing it's data members.
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
-        List entries = new ArrayList();
+        //List entries = new ArrayList();
 
         parser.next();
         //parser.require(XmlPullParser.START_TAG, ns, "channel");
@@ -42,17 +43,19 @@ public class SmhXmlParser {
             String name = parser.getName();
             //System.out.println(parser.getName());
             // Starts by looking for the entry tag
-            Item item = new Item("a","b","c","d","e");
+            Item item = new Item("","","","","");
             if (name.equals("item")) {
-                System.out.println("aaaaa");
+
                 entries.add(item.readItem(parser));
             } else {
                 item.skip(parser);
             }
         }
-        System.out.println(entries.size());
+        //MainActivity.itemList = entries;
         return entries;
 
     }
+
+
 
 }
