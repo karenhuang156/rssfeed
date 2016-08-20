@@ -32,22 +32,27 @@ public class SmhXmlParser {
     private List readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
         List entries = new ArrayList();
 
-        parser.require(XmlPullParser.START_TAG, ns, "feed");
+        parser.next();
+        //parser.require(XmlPullParser.START_TAG, ns, "channel");
+        //parser.require(XmlPullParser.START_TAG, ns, "link");
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String name = parser.getName();
+            //System.out.println(parser.getName());
             // Starts by looking for the entry tag
-            Item item = new Item(null,null,null,null,null);
+            Item item = new Item("a","b","c","d","e");
             if (name.equals("item")) {
-
+                System.out.println("aaaaa");
                 entries.add(item.readItem(parser));
             } else {
                 item.skip(parser);
             }
         }
+        System.out.println(entries.size());
         return entries;
+
     }
 
 }

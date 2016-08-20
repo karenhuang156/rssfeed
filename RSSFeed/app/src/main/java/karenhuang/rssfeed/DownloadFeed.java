@@ -31,8 +31,8 @@ public class DownloadFeed extends AsyncTask<String, Void, String>{
     protected void onPostExecute(String result) {
         //setContentView(R.layout.content_main){
             //displays html string in UI via a WebView
-           // WebView myWebView = (WebView) findViewById(R.id.webview);
-            //myWebView.loadData(result, "text/html", null);
+           //WebView myWebView = (WebView) findViewById(R.id.webview);
+           // MainActivity.webView.loadData(result, "text/html", null);
         }
 
     private String loadXml(String urlString) throws XmlPullParserException, IOException {

@@ -36,23 +36,32 @@ public class Item {
         String creator = null;
         String date = null;
         while (parser.next() != XmlPullParser.END_TAG) {
+            System.out.println("is not end tag");
             if (parser.getEventType() != XmlPullParser.START_TAG) {
+                System.out.println("not start tag");
                 continue;
             }
+
             String name = parser.getName();
-            if (name.equals("title")) {
-                title = readTitle(parser);
-            } else if (name.equals("link")) {
+             if (name.equals("title")) {
+                 title = readTitle(parser);
+                 System.out.println(title);
+             } else if (name.equals("link")) {
                 link = readLink(parser);
+                System.out.println(link);
             } else if (name.equals("description")) {
                 description = readDescription(parser);
-            } else if (name.equals("creator")) {
+                System.out.println(description);
+            } else if (name.equals("dc:creator")) {
                 creator = readCreator(parser);
-            } else if (name.equals("date")) {
+                System.out.println(creator);
+            } else if (name.equals("pubDate")) {
                 date = readDate(parser);
+                System.out.println(date);
             } else {
                 skip(parser);
             }
+
         }
         return new Item(title,link, description, creator, date);
     }
@@ -69,20 +78,26 @@ public class Item {
     //For the link tag, the parser extracts data for links by first determining if the link is the kind it's interested in.
     // Then it uses parser.getAttributeValue() to extract the link's value.
     private String readLink(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String link = "";
+       /* String link = "";
         parser.require(XmlPullParser.START_TAG, ns, "link");
         String tag = parser.getName();
-        //String relType = parser.getAttributeValue(null, "rel");
+        String relType = parser.getAttributeValue(null, "rel");
         if (tag.equals("link")) {
-           // if (relType.equals("alternate")){
-               // link = parser.getAttributeValue(null, "href");
+           if (relType.equals("alternate")){
+               link = parser.getAttributeValue(null, "href");
                 link = readText(parser);
                 parser.nextTag();
-            //} ***************************************************************************************
+            } //***************************************************************************************
         }
         parser.require(XmlPullParser.END_TAG, ns, "link");
         return link;
+    }*/
+        parser.require(XmlPullParser.START_TAG, ns, "link");
+        String link = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "link");
+        return link;
     }
+
 
     // Processes description tags in the feed.
     private String readDescription(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -100,9 +115,9 @@ public class Item {
     }
     // Processes date tags in the feed
     private String readDate(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, "date");
+        parser.require(XmlPullParser.START_TAG, ns, "pubDate");
         String date = readText(parser);
-        parser.require(XmlPullParser.END_TAG, ns, "date");
+        parser.require(XmlPullParser.END_TAG, ns, "pubDate");
         return date;
     }
 
